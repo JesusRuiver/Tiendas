@@ -2,6 +2,7 @@ package bbdd;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -92,6 +93,39 @@ public class Conexion {
 		}
 
 		return tiendas;
+	}
+
+	public ArrayList<String> dameVentas(String nif) {
+
+		ArrayList<String> ventas = new ArrayList<String>();
+
+		PreparedStatement enviaConsultaArticulosVentas;
+
+		String consulta = "Select v.nif, v.articulo, f.nombre, v.peso, v.categoria, v.fecha_venta, v.unidades_vendidas, a.precio_venta "
+				+ "from ventas v inner join articulos a on v.articulo = a.articulo and v.categoria = a.categoria, fabricantes f "
+				+ "where nif=? and v.cod_fabricante = f.cod_fabricante;";
+
+		try {
+			enviaConsultaArticulosVentas = conexion.prepareStatement(consulta);
+			enviaConsultaArticulosVentas.setString(1, nif);
+
+			ResultSet resultado = enviaConsultaArticulosVentas.executeQuery();
+
+			while (resultado.next()) {
+				ventas.add(resultado.getString(1) + resultado.getString(2) + resultado.getString(3) +
+						resultado.getString(4) + resultado.getString(5) + resultado.getString(6) +
+						resultado.getString(7) + resultado.getString(8));
+			}
+			resultado.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for (String i: ventas){
+			System.out.println(i);
+		}
+		return ventas;
 	}
 
 	public Connection getConexion() {

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
+  <bd>
+	<forname>com.mysql.jdbc.Driver</forname>
+	<servidor>jdbc:mysql://localhost/</servidor>
+	<parametros>
+		<basedatos>tiendas</basedatos>
+		<usuario>tiendas</usuario>
+		<clave>tiendas</clave>
+	</parametros>
+  </bd>
+</config>

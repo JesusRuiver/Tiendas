@@ -173,6 +173,7 @@ public class Conexion {
 			// TODO: handle exception
 		}
 
+		//Comprobación por consola si nos esta devolviendo bien las filas de la consulta
 		System.out.println(numFilas);
 
 		return numFilas;

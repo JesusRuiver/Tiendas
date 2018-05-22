@@ -155,7 +155,7 @@ public class Conexion {
 		
 		PreparedStatement enviaConsultaArticulosPedidos;
 		ResultSet resultado = null;
-		String consulta = "select p.nif, p.articulo, f.nombre, p.peso, p.categoria, p.fecha_venta, p.unidades_vendidas, a.precio_costo from pedidos p, articulos a, fabricantes f where nif=? and p.articulo = a.articulo and p.categoria = a.categoria and p.cod_fabricante = f.cod_fabricante;";
+		String consulta = "select p.nif, p.articulo, f.nombre, p.peso, p.categoria, p.fecha_pedido, p.unidades_pedidas, a.precio_costo from pedidos p, articulos a, fabricantes f where nif=? and p.articulo = a.articulo and p.categoria = a.categoria and p.cod_fabricante = f.cod_fabricante;";
 		try {
 			enviaConsultaArticulosPedidos = conexion.prepareStatement(consulta);
 			enviaConsultaArticulosPedidos.setString(1, nif);

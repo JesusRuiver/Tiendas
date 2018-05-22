@@ -25,10 +25,9 @@ public class EjercicioComboTabla extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTable tablaVentas;
 	private JTable tablaPedidos;
-	
+
 	private JScrollPane scrollPaneTabla;
 
-	
 	private Conexion miConexion = new Conexion();
 
 	/**
@@ -62,6 +61,7 @@ public class EjercicioComboTabla extends JFrame {
 		contentPane.setLayout(null);
 
 		JComboBox cboxTiendas = new JComboBox();
+
 		cboxTiendas.setBounds(27, 24, 287, 20);
 		contentPane.add(cboxTiendas);
 
@@ -77,13 +77,11 @@ public class EjercicioComboTabla extends JFrame {
 		rbtnPedidos.setBounds(186, 68, 66, 23);
 		contentPane.add(rbtnPedidos);
 
-		rellenaComboTiendas(miConexion, cboxTiendas);
-
 		scrollPaneTabla = new JScrollPane();
 		scrollPaneTabla.setBounds(27, 98, 813, 314);
 		contentPane.add(scrollPaneTabla);
-		
 
+		rellenaComboTiendas(miConexion, cboxTiendas);
 
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -104,6 +102,25 @@ public class EjercicioComboTabla extends JFrame {
 
 			}
 
+		});
+
+		cboxTiendas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (rbtnVentas.isSelected() == true) {
+
+					String nif = troceaNif(cboxTiendas);
+
+					construirTablaVentas(nif);
+
+				} else {
+
+					String nif = troceaNif(cboxTiendas);
+
+					construirTablaPedidos(nif);
+
+				}
+			}
 		});
 
 	}
@@ -195,7 +212,7 @@ public class EjercicioComboTabla extends JFrame {
 	}
 
 	private String[][] obtenerDatosPedidos(String nif) {
-		
+
 		/*
 		 * Obtiene la longitud de la consulta a traves de un metodo que cuenta
 		 * los campos de la consulra
@@ -235,6 +252,6 @@ public class EjercicioComboTabla extends JFrame {
 		}
 
 		return matrizInfo;
-		
+
 	}
 }

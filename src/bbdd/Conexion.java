@@ -95,6 +95,13 @@ public class Conexion {
 		return tiendas;
 	}
 
+	/**
+	 * Metodo dameVentas nos devuelve un array con todas las ventas PERO no lo
+	 * estamos utilizando finalmente
+	 * 
+	 * @param nif
+	 * @return
+	 */
 	public ArrayList<String> dameVentas(String nif) {
 
 		ArrayList<String> ventas = new ArrayList<String>();
@@ -102,7 +109,7 @@ public class Conexion {
 		PreparedStatement enviaConsultaArticulosVentas;
 
 		String consulta = "select v.nif, v.articulo, f.nombre, v.peso, v.categoria, v.fecha_venta, v.unidades_vendidas, a.precio_venta from ventas v, articulos a, fabricantes f where nif=? and v.articulo = a.articulo and v.categoria = a.categoria and v.cod_fabricante = f.cod_fabricante;";
-		
+
 		try {
 			enviaConsultaArticulosVentas = conexion.prepareStatement(consulta);
 			enviaConsultaArticulosVentas.setString(1, nif);
@@ -110,20 +117,66 @@ public class Conexion {
 			ResultSet resultado = enviaConsultaArticulosVentas.executeQuery();
 
 			while (resultado.next()) {
-				ventas.add(resultado.getString(1) + resultado.getString(2) + resultado.getString(3) +
-						resultado.getString(4) + resultado.getString(5) + resultado.getString(6) +
-						resultado.getString(7) + resultado.getString(8));
+				ventas.add(resultado.getString(1) + resultado.getString(2) + resultado.getString(3)
+						+ resultado.getString(4) + resultado.getString(5) + resultado.getString(6)
+						+ resultado.getString(7) + resultado.getString(8));
 			}
 			resultado.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		for (String i: ventas){
-			System.out.println(i);
-		}
+
+		// Bucle for each para ver las ventas
+		/*
+		 * for (String i : ventas) { System.out.println(i); }
+		 */
+
 		return ventas;
+	}
+
+	public ResultSet dameResultadosVentas(String nif) {
+
+		PreparedStatement enviaConsultaArticulosVentas;
+		ResultSet resultado = null;
+		String consulta = "select v.nif, v.articulo, f.nombre, v.peso, v.categoria, v.fecha_venta, v.unidades_vendidas, a.precio_venta from ventas v, articulos a, fabricantes f where nif=? and v.articulo = a.articulo and v.categoria = a.categoria and v.cod_fabricante = f.cod_fabricante;";
+		try {
+			enviaConsultaArticulosVentas = conexion.prepareStatement(consulta);
+			enviaConsultaArticulosVentas.setString(1, nif);
+
+			resultado = enviaConsultaArticulosVentas.executeQuery();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return resultado;
+	}
+
+	public int dameNumeroFilasVentas(String nif) {
+
+		int numFilas = 0;
+
+		PreparedStatement enviaConsultaArticulosVentas;
+		ResultSet resultado = null;
+		String consulta = "Select count(*) from ventas v, articulos a, fabricantes f where nif=? and v.articulo = a.articulo and v.categoria = a.categoria and v.cod_fabricante = f.cod_fabricante;";
+		try {
+			enviaConsultaArticulosVentas = conexion.prepareStatement(consulta);
+			enviaConsultaArticulosVentas.setString(1, nif);
+
+			resultado = enviaConsultaArticulosVentas.executeQuery();
+
+			while (resultado.next()) {
+
+				numFilas = resultado.getInt(1);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		System.out.println(numFilas);
+
+		return numFilas;
+
 	}
 
 	public Connection getConexion() {

@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -25,8 +27,8 @@ public class EjercicioComboTabla extends JFrame {
 	private JPanel contentPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTable tablaVentas;
-	private JScrollPane scrollPaneVentas;
-	
+	private JScrollPane scrollPaneTabla;
+
 	private Conexion miConexion = new Conexion();
 
 	/**
@@ -49,8 +51,6 @@ public class EjercicioComboTabla extends JFrame {
 	 * Create the frame.
 	 */
 	public EjercicioComboTabla() {
-
-		
 
 		miConexion.conectar();
 
@@ -77,11 +77,11 @@ public class EjercicioComboTabla extends JFrame {
 		contentPane.add(rbtnPedidos);
 
 		rellenaComboTiendas(miConexion, cboxTiendas);
-		
-		scrollPaneVentas = new JScrollPane();
-		scrollPaneVentas.setBounds(27, 98, 813, 314);
-		contentPane.add(scrollPaneVentas);
-		
+
+		scrollPaneTabla = new JScrollPane();
+		scrollPaneTabla.setBounds(27, 98, 813, 314);
+		contentPane.add(scrollPaneTabla);
+
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -95,7 +95,7 @@ public class EjercicioComboTabla extends JFrame {
 	}
 
 	public void rellenaComboTiendas(Conexion miConexion, JComboBox cboxTiendas) {
-		ArrayList<String> tiendas = new ArrayList();
+		ArrayList<String> tiendas = new ArrayList<String>();
 
 		tiendas = miConexion.dameTiendas();
 
@@ -115,37 +115,56 @@ public class EjercicioComboTabla extends JFrame {
 
 		return nif;
 	}
-	
+
 	private void construirTablaVentas(String nif) {
 
 		String titulosColumnas[] = { "NIF", "ARTICULO", "FABRICANTE", "PESO", "CATEGORIA", "FECHA VENTA",
-				"UNIDADES VENDIDAS", "PRECIO VENTA"};
+				"UNIDADES VENDIDAS", "PRECIO VENTA" };
 		String informacionTablaVentas[][] = obtenerDatosVentas(nif);
 
 		tablaVentas = new JTable(informacionTablaVentas, titulosColumnas);
-		scrollPaneVentas.setViewportView(tablaVentas);
+		scrollPaneTabla.setViewportView(tablaVentas);
 
 	}
 
 	private String[][] obtenerDatosVentas(String nif) {
 
-		ArrayList<String> ventas = new ArrayList<String>();
+		/*
+		 * Obtiene la longitud de la consulta a traves de un metodo que cuenta
+		 * los campos de la consulra
+		 */
+		int numFilasVentas = miConexion.dameNumeroFilasVentas(nif);
 
-		ventas = miConexion.dameVentas(nif);
+		/*
+		 * Tenemos un metodo que nos devuelve un resultset con los campos de la
+		 * consulta
+		 */
 
-		String matrizInfo[][] = new String[ventas.size()][8];// matriz [fila]
-															// [columna]
+		ResultSet resultado = miConexion.dameResultadosVentas(nif);
 
-		for (int i = 0; i < ventas.size(); i++) {
+		//Iniciamo el contador de filas
+		int i = 0;
 
-			matrizInfo[i][0] = ventas.get(i);
-			matrizInfo[i][1] = ventas.get(i);
-			matrizInfo[i][2] = ventas.get(i);
-			matrizInfo[i][3] = ventas.get(i);
-			matrizInfo[i][4] = ventas.get(i);
-			matrizInfo[i][5] = ventas.get(i);
-			matrizInfo[i][6] = ventas.get(i);
-			matrizInfo[i][7] = ventas.get(i);
+		// matriz [fila][columna]
+		String matrizInfo[][] = new String[numFilasVentas][8];
+
+		try {
+			while (resultado.next()) {
+
+				matrizInfo[i][0] = resultado.getString(1);
+				matrizInfo[i][1] = resultado.getString(2);
+				matrizInfo[i][2] = resultado.getString(3);
+				matrizInfo[i][3] = resultado.getString(4);
+				matrizInfo[i][4] = resultado.getString(5);
+				matrizInfo[i][5] = resultado.getString(6);
+				matrizInfo[i][6] = resultado.getString(7);
+				matrizInfo[i][7] = resultado.getString(8);
+
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return matrizInfo;

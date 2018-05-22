@@ -101,10 +101,8 @@ public class Conexion {
 
 		PreparedStatement enviaConsultaArticulosVentas;
 
-		String consulta = "Select v.nif, v.articulo, f.nombre, v.peso, v.categoria, v.fecha_venta, v.unidades_vendidas, a.precio_venta "
-				+ "from ventas v inner join articulos a on v.articulo = a.articulo and v.categoria = a.categoria, fabricantes f "
-				+ "where nif=? and v.cod_fabricante = f.cod_fabricante;";
-
+		String consulta = "select v.nif, v.articulo, f.nombre, v.peso, v.categoria, v.fecha_venta, v.unidades_vendidas, a.precio_venta from ventas v, articulos a, fabricantes f where nif=? and v.articulo = a.articulo and v.categoria = a.categoria and v.cod_fabricante = f.cod_fabricante;";
+		
 		try {
 			enviaConsultaArticulosVentas = conexion.prepareStatement(consulta);
 			enviaConsultaArticulosVentas.setString(1, nif);

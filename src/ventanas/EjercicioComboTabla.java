@@ -78,6 +78,10 @@ public class EjercicioComboTabla extends JFrame {
 
 		rellenaComboTiendas(miConexion, cboxTiendas);
 		
+		scrollPaneVentas = new JScrollPane();
+		scrollPaneVentas.setBounds(27, 98, 813, 314);
+		contentPane.add(scrollPaneVentas);
+		
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -112,37 +116,38 @@ public class EjercicioComboTabla extends JFrame {
 		return nif;
 	}
 	
-	private DefaultTableModel construirTablaVentas() {
+	private void construirTablaVentas(String nif) {
 
-		DefaultTableModel modelo = new DefaultTableModel();
-		
-		modelo.addColumn("NIF");
-		modelo.addColumn("ARTICULO");
-		modelo.addColumn("FABRICANTE");
-		modelo.addColumn("PESO");
-		modelo.addColumn("CATEGORIA");
-		modelo.addColumn("FECHA VENTA");
-		modelo.addColumn("UNIDADES VENDIDAS");
-		modelo.addColumn("PRECIO VENTA");
+		String titulosColumnas[] = { "NIF", "ARTICULO", "FABRICANTE", "PESO", "CATEGORIA", "FECHA VENTA",
+				"UNIDADES VENDIDAS", "PRECIO VENTA"};
+		String informacionTablaVentas[][] = obtenerDatosVentas(nif);
 
-		tablaVentas = new JTable(modelo);
+		tablaVentas = new JTable(informacionTablaVentas, titulosColumnas);
 		scrollPaneVentas.setViewportView(tablaVentas);
-		
-		return modelo;
 
 	}
-	
-	private void obtenerDatosVentas(DefaultTableModel modelo, String nif) {
+
+	private String[][] obtenerDatosVentas(String nif) {
 
 		ArrayList<String> ventas = new ArrayList<String>();
 
 		ventas = miConexion.dameVentas(nif);
 
+		String matrizInfo[][] = new String[ventas.size()][8];// matriz [fila]
+															// [columna]
+
 		for (int i = 0; i < ventas.size(); i++) {
 
-		modelo.addRow(ventas.get(i));
-
+			matrizInfo[i][0] = ventas.get(i);
+			matrizInfo[i][1] = ventas.get(i);
+			matrizInfo[i][2] = ventas.get(i);
+			matrizInfo[i][3] = ventas.get(i);
+			matrizInfo[i][4] = ventas.get(i);
+			matrizInfo[i][5] = ventas.get(i);
+			matrizInfo[i][6] = ventas.get(i);
+			matrizInfo[i][7] = ventas.get(i);
 		}
 
+		return matrizInfo;
 	}
 }

@@ -1,6 +1,5 @@
 package ventanas;
 
-
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,8 +24,11 @@ public class EjercicioComboTabla extends JFrame {
 	private JPanel contentPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTable tablaVentas;
+	private JTable tablaPedidos;
+	
 	private JScrollPane scrollPaneTabla;
 
+	
 	private Conexion miConexion = new Conexion();
 
 	/**
@@ -70,6 +72,7 @@ public class EjercicioComboTabla extends JFrame {
 		contentPane.add(rbtnVentas);
 
 		JRadioButton rbtnPedidos = new JRadioButton("Pedidos");
+
 		buttonGroup.add(rbtnPedidos);
 		rbtnPedidos.setBounds(186, 68, 66, 23);
 		contentPane.add(rbtnPedidos);
@@ -79,6 +82,8 @@ public class EjercicioComboTabla extends JFrame {
 		scrollPaneTabla = new JScrollPane();
 		scrollPaneTabla.setBounds(27, 98, 813, 314);
 		contentPane.add(scrollPaneTabla);
+		
+
 
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -88,6 +93,17 @@ public class EjercicioComboTabla extends JFrame {
 				construirTablaVentas(nif);
 
 			}
+		});
+
+		rbtnPedidos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String nif = troceaNif(cboxTiendas);
+
+				construirTablaPedidos(nif);
+
+			}
+
 		});
 
 	}
@@ -140,7 +156,7 @@ public class EjercicioComboTabla extends JFrame {
 
 		ResultSet resultado = miConexion.dameResultadosVentas(nif);
 
-		//Iniciamo el contador de filas
+		// Iniciamo el contador de filas
 		int i = 0;
 
 		// matriz [fila][columna]
@@ -166,5 +182,59 @@ public class EjercicioComboTabla extends JFrame {
 		}
 
 		return matrizInfo;
+	}
+
+	private void construirTablaPedidos(String nif) {
+		String titulosColumnas[] = { "NIF", "ARTICULO", "FABRICANTE", "PESO", "CATEGORIA", "FECHA VENTA",
+				"UNIDADES PEDIDAS", "PRECIO COSTO" };
+		String informacionTablaPedidos[][] = obtenerDatosPedidos(nif);
+
+		tablaPedidos = new JTable(informacionTablaPedidos, titulosColumnas);
+		scrollPaneTabla.setViewportView(tablaPedidos);
+
+	}
+
+	private String[][] obtenerDatosPedidos(String nif) {
+		
+		/*
+		 * Obtiene la longitud de la consulta a traves de un metodo que cuenta
+		 * los campos de la consulra
+		 */
+		int numFilasPedidos = miConexion.dameNumeroFilasPedidos(nif);
+
+		/*
+		 * Tenemos un metodo que nos devuelve un resultset con los campos de la
+		 * consulta
+		 */
+
+		ResultSet resultado = miConexion.dameResultadosPedidos(nif);
+
+		// Iniciamo el contador de filas
+		int i = 0;
+
+		// matriz [fila][columna]
+		String matrizInfo[][] = new String[numFilasPedidos][8];
+
+		try {
+			while (resultado.next()) {
+
+				matrizInfo[i][0] = resultado.getString(1);
+				matrizInfo[i][1] = resultado.getString(2);
+				matrizInfo[i][2] = resultado.getString(3);
+				matrizInfo[i][3] = resultado.getString(4);
+				matrizInfo[i][4] = resultado.getString(5);
+				matrizInfo[i][5] = resultado.getString(6);
+				matrizInfo[i][6] = resultado.getString(7);
+				matrizInfo[i][7] = resultado.getString(8);
+
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return matrizInfo;
+		
 	}
 }

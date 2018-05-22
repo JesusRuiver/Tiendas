@@ -151,6 +151,22 @@ public class Conexion {
 		return resultado;
 	}
 
+	public ResultSet dameResultadosPedidos(String nif) {
+		
+		PreparedStatement enviaConsultaArticulosPedidos;
+		ResultSet resultado = null;
+		String consulta = "select p.nif, p.articulo, f.nombre, p.peso, p.categoria, p.fecha_venta, p.unidades_vendidas, a.precio_costo from pedidos p, articulos a, fabricantes f where nif=? and p.articulo = a.articulo and p.categoria = a.categoria and p.cod_fabricante = f.cod_fabricante;";
+		try {
+			enviaConsultaArticulosPedidos = conexion.prepareStatement(consulta);
+			enviaConsultaArticulosPedidos.setString(1, nif);
+
+			resultado = enviaConsultaArticulosPedidos.executeQuery();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return resultado;
+		
+	}
 	public int dameNumeroFilasVentas(String nif) {
 
 		int numFilas = 0;
@@ -173,11 +189,42 @@ public class Conexion {
 			// TODO: handle exception
 		}
 
-		//Comprobación por consola si nos esta devolviendo bien las filas de la consulta
+		// Comprobación por consola si nos esta devolviendo bien las filas de la
+		// consulta
 		System.out.println(numFilas);
 
 		return numFilas;
 
+	}
+
+	public int dameNumeroFilasPedidos(String nif) {
+		
+		int numFilas = 0;
+
+		PreparedStatement enviaConsultaArticulosPedidos;
+		ResultSet resultado = null;
+		String consulta = "Select count(*) from pedidos p, articulos a, fabricantes f where nif=? and p.articulo = a.articulo and p.categoria = a.categoria and p.cod_fabricante = f.cod_fabricante;";
+		try {
+			enviaConsultaArticulosPedidos = conexion.prepareStatement(consulta);
+			enviaConsultaArticulosPedidos.setString(1, nif);
+
+			resultado = enviaConsultaArticulosPedidos.executeQuery();
+
+			while (resultado.next()) {
+
+				numFilas = resultado.getInt(1);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		// Comprobación por consola si nos esta devolviendo bien las filas de la
+		// consulta
+		System.out.println(numFilas);
+
+		return numFilas;
+		
 	}
 
 	public Connection getConexion() {
@@ -227,5 +274,7 @@ public class Conexion {
 	public void setForName(String forName) {
 		this.forName = forName;
 	}
+
+	
 
 }

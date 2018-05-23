@@ -152,7 +152,7 @@ public class Conexion {
 	}
 
 	public ResultSet dameResultadosPedidos(String nif) {
-		
+
 		PreparedStatement enviaConsultaArticulosPedidos;
 		ResultSet resultado = null;
 		String consulta = "select p.nif, p.articulo, f.nombre, p.peso, p.categoria, p.fecha_pedido, p.unidades_pedidas, a.precio_costo from pedidos p, articulos a, fabricantes f where nif=? and p.articulo = a.articulo and p.categoria = a.categoria and p.cod_fabricante = f.cod_fabricante;";
@@ -165,8 +165,9 @@ public class Conexion {
 			// TODO: handle exception
 		}
 		return resultado;
-		
+
 	}
+
 	public int dameNumeroFilasVentas(String nif) {
 
 		int numFilas = 0;
@@ -198,7 +199,7 @@ public class Conexion {
 	}
 
 	public int dameNumeroFilasPedidos(String nif) {
-		
+
 		int numFilas = 0;
 
 		PreparedStatement enviaConsultaArticulosPedidos;
@@ -224,7 +225,67 @@ public class Conexion {
 		System.out.println(numFilas);
 
 		return numFilas;
-		
+
+	}
+
+	public String sumaPrecioVenta(String nif) {
+
+		String totalVentas = null;
+
+		PreparedStatement enviaConsultaSumaVentas;
+
+		ResultSet resultado;
+
+		String consultaPreparadaSumaVentas = "select sum(v.unidades_vendidas * a.precio_venta) as 'Total Uds. Vendidas' from ventas v, articulos a, fabricantes f "
+				+ "where nif=? and v.articulo = a.articulo and v.categoria = a.categoria and v.cod_fabricante = f.cod_fabricante;";
+
+		try {
+			enviaConsultaSumaVentas = conexion.prepareStatement(consultaPreparadaSumaVentas);
+
+			enviaConsultaSumaVentas.setString(1, nif);
+
+			resultado = enviaConsultaSumaVentas.executeQuery();
+
+			if (resultado.next()) {
+				totalVentas = resultado.getString("Total Uds. Vendidas");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return totalVentas;
+	}
+
+	public String sumaPrecioCosto(String nif) {
+
+		String totalPedidos = null;
+
+		PreparedStatement enviaConsultaSumaPedidos;
+
+		ResultSet resultado;
+
+		String consultaPreparadaSumaPedidos = "select sum(p.unidades_pedidas * a.precio_costo) as 'Total Uds. Pedidas' "
+				+ "from pedidos p, articulos a, fabricantes f " + "where nif=? "
+				+ "and p.articulo = a.articulo and p.categoria = a.categoria and p.cod_fabricante = f.cod_fabricante;";
+
+		try {
+
+			enviaConsultaSumaPedidos = conexion.prepareStatement(consultaPreparadaSumaPedidos);
+			enviaConsultaSumaPedidos.setString(1, nif);
+
+			resultado = enviaConsultaSumaPedidos.executeQuery();
+
+			if (resultado.next()) {
+
+				totalPedidos = resultado.getString("Total Uds. Pedidas");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(totalPedidos);
+		return totalPedidos;
 	}
 
 	public Connection getConexion() {
@@ -274,7 +335,5 @@ public class Conexion {
 	public void setForName(String forName) {
 		this.forName = forName;
 	}
-
-	
 
 }

@@ -18,6 +18,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class EjercicioComboTabla extends JFrame {
 
@@ -54,7 +56,7 @@ public class EjercicioComboTabla extends JFrame {
 		miConexion.conectar();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 866, 461);
+		setBounds(100, 100, 866, 505);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -74,21 +76,35 @@ public class EjercicioComboTabla extends JFrame {
 		JRadioButton rbtnPedidos = new JRadioButton("Pedidos");
 
 		buttonGroup.add(rbtnPedidos);
-		rbtnPedidos.setBounds(186, 68, 66, 23);
+		rbtnPedidos.setBounds(144, 68, 78, 23);
 		contentPane.add(rbtnPedidos);
 
 		scrollPaneTabla = new JScrollPane();
-		scrollPaneTabla.setBounds(27, 98, 813, 314);
+		scrollPaneTabla.setBounds(10, 98, 830, 314);
 		contentPane.add(scrollPaneTabla);
 
 		rellenaComboTiendas(miConexion, cboxTiendas);
+
+		JLabel lbTotal = new JLabel("Total:");
+		lbTotal.setFont(new Font("Arial", Font.BOLD, 13));
+		lbTotal.setBounds(526, 434, 46, 14);
+		contentPane.add(lbTotal);
+
+		JLabel lbResultadoTotal = new JLabel("");
+		lbResultadoTotal.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbResultadoTotal.setBounds(568, 429, 258, 25);
+		contentPane.add(lbResultadoTotal);
 
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String nif = troceaNif(cboxTiendas);
 
+				String resultadoTotalVentas = miConexion.sumaPrecioVenta(nif);
+				
 				construirTablaVentas(nif);
+
+				lbResultadoTotal.setText(resultadoTotalVentas + " € Ingresos Ventas");
 
 			}
 		});
@@ -97,8 +113,12 @@ public class EjercicioComboTabla extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String nif = troceaNif(cboxTiendas);
+				
+				String resultadoTotalPedidos = miConexion.sumaPrecioCosto(nif);
 
 				construirTablaPedidos(nif);
+				
+				lbResultadoTotal.setText(resultadoTotalPedidos + "€ Coste Pedidos");
 
 			}
 
@@ -111,13 +131,21 @@ public class EjercicioComboTabla extends JFrame {
 
 					String nif = troceaNif(cboxTiendas);
 
+					String resultadoTotalVentas = miConexion.sumaPrecioVenta(nif);
+
 					construirTablaVentas(nif);
+
+					lbResultadoTotal.setText(resultadoTotalVentas + " € Ingresos Ventas");
 
 				} else {
 
 					String nif = troceaNif(cboxTiendas);
+					
+					String resultadoTotalPedidos = miConexion.sumaPrecioCosto(nif);
 
 					construirTablaPedidos(nif);
+					
+					lbResultadoTotal.setText(resultadoTotalPedidos + "€ Coste Pedidos");
 
 				}
 			}

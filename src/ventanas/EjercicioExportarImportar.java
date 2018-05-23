@@ -3,8 +3,10 @@ package ventanas;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
@@ -98,8 +100,6 @@ public class EjercicioExportarImportar extends JFrame {
 
 		/*---------------------------------ACCIONES DE LOS BOTONES----------------------*/
 
-		
-
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -127,7 +127,7 @@ public class EjercicioExportarImportar extends JFrame {
 
 			}
 		});
-		
+
 		cboxTiendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -206,6 +206,68 @@ public class EjercicioExportarImportar extends JFrame {
 			}
 		});
 
+		btnImportarBinarioSecuencial.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (rbtnVentas.isSelected() == true) {
+					try {
+						File fichero = new File("FicheroDatosVentas.dat");
+
+						FileInputStream filein = new FileInputStream(fichero);
+
+						DataInputStream dataIS = new DataInputStream(filein);
+
+						String ventas;
+
+						while (true) {
+
+							ventas = dataIS.readUTF();
+
+							System.out.println(ventas);
+						}
+						// Funcion pero no me deja cerrar el DataInputStream
+						// dataIS.close();
+
+					} catch (Exception ex) {
+						// TODO: handle exception
+					}
+
+				} else {
+
+					try {
+
+						File fichero = new File("FicheroDatosPedidos.dat");
+
+						FileInputStream filein = new FileInputStream(fichero);
+
+						DataInputStream dataIS = new DataInputStream(filein);
+
+						String pedidos;
+
+						while (true) {
+
+							pedidos = dataIS.readUTF();
+
+							System.out.println(pedidos);
+						}
+						// Funcion pero no me deja cerrar el DataInputStream
+						// dataIS.close();
+
+					} catch (Exception ex) {
+						// TODO: handle exception
+					}
+
+				}
+			}
+		});
+
+		btnExportarXML.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+			}
+
+		});
 	}
 
 	/*-------------------------------------METODOS-----------------------------------*/

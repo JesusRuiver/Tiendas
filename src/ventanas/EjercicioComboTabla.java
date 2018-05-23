@@ -83,8 +83,6 @@ public class EjercicioComboTabla extends JFrame {
 		scrollPaneTabla.setBounds(10, 98, 830, 314);
 		contentPane.add(scrollPaneTabla);
 
-		rellenaComboTiendas(miConexion, cboxTiendas);
-
 		JLabel lbTotal = new JLabel("Total:");
 		lbTotal.setFont(new Font("Arial", Font.BOLD, 13));
 		lbTotal.setBounds(526, 434, 46, 14);
@@ -95,6 +93,10 @@ public class EjercicioComboTabla extends JFrame {
 		lbResultadoTotal.setBounds(568, 429, 258, 25);
 		contentPane.add(lbResultadoTotal);
 
+		
+		rellenaComboTiendas(miConexion, cboxTiendas);
+		
+		
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 

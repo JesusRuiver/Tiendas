@@ -102,9 +102,9 @@ public class Conexion {
 	 * @param nif
 	 * @return
 	 */
-	public ArrayList<String> dameVentas(String nif) {
+	public String[] dameVentas(String nif) {
 
-		ArrayList<String> ventas = new ArrayList<String>();
+		String[] ventas = new String[dameNumeroFilasVentas(nif)];
 
 		PreparedStatement enviaConsultaArticulosVentas;
 
@@ -116,10 +116,15 @@ public class Conexion {
 
 			ResultSet resultado = enviaConsultaArticulosVentas.executeQuery();
 
+			int i = 0;
+
 			while (resultado.next()) {
-				ventas.add(resultado.getString(1) + resultado.getString(2) + resultado.getString(3)
+
+				ventas[i] = resultado.getString(1) + resultado.getString(2) + resultado.getString(3)
 						+ resultado.getString(4) + resultado.getString(5) + resultado.getString(6)
-						+ resultado.getString(7) + resultado.getString(8));
+						+ resultado.getString(7) + resultado.getString(8);
+
+				i++;
 			}
 			resultado.close();
 		} catch (SQLException e) {
@@ -133,6 +138,36 @@ public class Conexion {
 		 */
 
 		return ventas;
+	}
+
+	public ArrayList<String> damePedidos(String nif) {
+
+		ArrayList<String> pedidos = new ArrayList<String>();
+
+		PreparedStatement enviaConsultaArticulosPedidos;
+
+		String consulta = "select p.nif, p.articulo, f.nombre, p.peso, p.categoria, p.fecha_pedido, p.unidades_pedidas, a.precio_costo "
+				+ "from pedidos p, articulos a, fabricantes f " + "where nif=? "
+				+ "and p.articulo = a.articulo and p.categoria = a.categoria and p.cod_fabricante = f.cod_fabricante;";
+
+		try {
+			enviaConsultaArticulosPedidos = conexion.prepareStatement(consulta);
+			enviaConsultaArticulosPedidos.setString(1, nif);
+
+			ResultSet resultado = enviaConsultaArticulosPedidos.executeQuery();
+
+			while (resultado.next()) {
+				pedidos.add(resultado.getString(1) + " " + resultado.getString(2) + " " + resultado.getString(3) + " "
+						+ resultado.getString(4) + " " + resultado.getString(5) + " " + resultado.getString(6) + " "
+						+ resultado.getString(7) + " " + resultado.getString(8));
+			}
+			resultado.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return pedidos;
 	}
 
 	public ResultSet dameResultadosVentas(String nif) {

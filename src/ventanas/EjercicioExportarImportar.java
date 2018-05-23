@@ -6,14 +6,11 @@ import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 import bbdd.Conexion;
 
@@ -28,7 +25,7 @@ public class EjercicioExportarImportar extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	private String[] ventas;
-	private ArrayList<String> pedidos = new ArrayList<String>();
+	private String[] pedidos;
 
 	private Conexion miConexion = new Conexion();
 
@@ -101,14 +98,16 @@ public class EjercicioExportarImportar extends JFrame {
 
 		/*---------------------------------ACCIONES DE LOS BOTONES----------------------*/
 
+		
+
 		rbtnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String nif = troceaNif(cboxTiendas);
 
 				ventas = miConexion.dameVentas(nif);
-				
-				for (String i : ventas){
+
+				for (String i : ventas) {
 					System.out.println(i);
 				}
 
@@ -122,11 +121,13 @@ public class EjercicioExportarImportar extends JFrame {
 
 				pedidos = miConexion.damePedidos(nif);
 
-				System.out.println(pedidos);
+				for (String i : pedidos) {
+					System.out.println(i);
+				}
 
 			}
 		});
-
+		
 		cboxTiendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -136,15 +137,18 @@ public class EjercicioExportarImportar extends JFrame {
 
 					ventas = miConexion.dameVentas(nif);
 
-					System.out.println(ventas);
-
+					for (String i : ventas) {
+						System.out.println(i);
+					}
 				} else {
 
 					String nif = troceaNif(cboxTiendas);
 
 					pedidos = miConexion.damePedidos(nif);
 
-					System.out.println(pedidos);
+					for (String i : pedidos) {
+						System.out.println(i);
+					}
 
 				}
 
@@ -153,18 +157,52 @@ public class EjercicioExportarImportar extends JFrame {
 
 		btnExportarBinarioSecuencial.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try{
-				File fichero = new File("FicheroDatos.dat");
-				FileOutputStream fileout = new FileOutputStream(fichero);
-				DataOutputStream dataOS = new DataOutputStream(fileout);
 
-				for (int i = 0; i < ventas.length; i++) {
-					dataOS.writeUTF(ventas[i]); // inserta nombre
+				if (rbtnVentas.isSelected() == true) {
+
+					try {
+						File fichero = new File("FicheroDatosVentas.dat");
+
+						FileOutputStream fileout = new FileOutputStream(fichero);
+
+						DataOutputStream dataOS = new DataOutputStream(fileout);
+
+						for (int i = 0; i < ventas.length; i++) {
+
+							dataOS.writeUTF(ventas[i]); // inserta nombre
+						}
+						dataOS.close(); // cerrar stream
+
+						System.out.println("Exportado Fichero Ventas");
+
+					} catch (Exception ex) {
+						// TODO: handle exception
+					}
+
+				} else {
+
+					try {
+						File fichero = new File("FicheroDatosPedidos.dat");
+
+						FileOutputStream fileout = new FileOutputStream(fichero);
+
+						DataOutputStream dataOS = new DataOutputStream(fileout);
+
+						for (int i = 0; i < pedidos.length; i++) {
+
+							dataOS.writeUTF(pedidos[i]); // inserta nombre
+
+						}
+
+						dataOS.close(); // cerrar stream
+
+						System.out.println("Exportado Fichero Pedidos");
+					} catch (Exception ex) {
+						// TODO: handle exception
+					}
+
 				}
-				dataOS.close(); // cerrar stream
-				} catch (Exception ex) {
-					// TODO: handle exception
-				}
+
 			}
 		});
 

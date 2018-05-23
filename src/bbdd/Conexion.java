@@ -120,9 +120,9 @@ public class Conexion {
 
 			while (resultado.next()) {
 
-				ventas[i] = resultado.getString(1) + resultado.getString(2) + resultado.getString(3)
-						+ resultado.getString(4) + resultado.getString(5) + resultado.getString(6)
-						+ resultado.getString(7) + resultado.getString(8);
+				ventas[i] = resultado.getString(1) + " " + resultado.getString(2) + " " + resultado.getString(3)
+						+ " " + resultado.getString(4) + " " + resultado.getString(5) + " " + resultado.getString(6)
+						+ " " + resultado.getString(7) + " " + resultado.getString(8);
 
 				i++;
 			}
@@ -140,9 +140,9 @@ public class Conexion {
 		return ventas;
 	}
 
-	public ArrayList<String> damePedidos(String nif) {
+	public String [] damePedidos(String nif) {
 
-		ArrayList<String> pedidos = new ArrayList<String>();
+		String [] pedidos = new String [dameNumeroFilasPedidos(nif)];
 
 		PreparedStatement enviaConsultaArticulosPedidos;
 
@@ -155,11 +155,15 @@ public class Conexion {
 			enviaConsultaArticulosPedidos.setString(1, nif);
 
 			ResultSet resultado = enviaConsultaArticulosPedidos.executeQuery();
-
+			
+			int i = 0;
+			
 			while (resultado.next()) {
-				pedidos.add(resultado.getString(1) + " " + resultado.getString(2) + " " + resultado.getString(3) + " "
+				pedidos[i] = resultado.getString(1) + " " + resultado.getString(2) + " " + resultado.getString(3) + " "
 						+ resultado.getString(4) + " " + resultado.getString(5) + " " + resultado.getString(6) + " "
-						+ resultado.getString(7) + " " + resultado.getString(8));
+						+ resultado.getString(7) + " " + resultado.getString(8);
+				
+				i++;
 			}
 			resultado.close();
 		} catch (SQLException e) {

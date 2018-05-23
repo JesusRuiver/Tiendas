@@ -1,5 +1,6 @@
 package bbdd;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Conexion {
 
@@ -35,13 +44,17 @@ public class Conexion {
 
 	public void conectar() {
 
-		this.forName = "com.mysql.jdbc.Driver";
-		this.servidor = "jdbc:mysql://localhost/";
-		this.baseDatos = "tiendas";
-		this.usuario = "tiendas";
-		this.pass = "tiendas";
+		
+		 this.forName = "com.mysql.jdbc.Driver"; 
+		 this.servidor = "jdbc:mysql://localhost/"; 
+		 this.baseDatos = "tiendas"; 
+		 this.usuario = "tiendas"; 
+		 this.pass = "tiendas";
+		 
 
 		try {
+			
+			//leerXML();
 
 			Class.forName(getForName());
 
@@ -57,6 +70,42 @@ public class Conexion {
 			System.out.println("Error... No Conectado");
 
 			e.printStackTrace();
+		}
+
+	}
+
+	public void leerXML() {
+
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+		try {
+
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document documento = builder.parse(new File("configtiendasXML.xml"));
+			documento.getDocumentElement().normalize();
+
+			NodeList config = documento.getElementsByTagName("config");
+
+			Node bd = config.item(0);
+
+			Element elemento = (Element) bd;
+
+			this.forName = elemento.getElementsByTagName("forname").item(0).getTextContent();
+			this.servidor = elemento.getElementsByTagName("servidor").item(0).getTextContent();
+			this.baseDatos = elemento.getElementsByTagName("basedatos").item(0).getTextContent();
+			this.usuario = elemento.getElementsByTagName("usuario").item(0).getTextContent();
+			this.pass = elemento.getElementsByTagName("clave").item(0).getTextContent();
+
+			/* Comprobamos si esta recogiedo los datos del XML */
+
+			System.out.println("Conector Driver JDBC: " + forName);
+			System.out.println("Servidor: " + servidor);
+			System.out.println("Nombre de la Base de Datos: " + baseDatos);
+			System.out.println("Usuario: " + usuario);
+			System.out.println("Clave: " + pass);
+
+		} catch (Exception e) {
+
 		}
 
 	}
@@ -120,9 +169,9 @@ public class Conexion {
 
 			while (resultado.next()) {
 
-				ventas[i] = resultado.getString(1) + " " + resultado.getString(2) + " " + resultado.getString(3)
-						+ " " + resultado.getString(4) + " " + resultado.getString(5) + " " + resultado.getString(6)
-						+ " " + resultado.getString(7) + " " + resultado.getString(8);
+				ventas[i] = resultado.getString(1) + " " + resultado.getString(2) + " " + resultado.getString(3) + " "
+						+ resultado.getString(4) + " " + resultado.getString(5) + " " + resultado.getString(6) + " "
+						+ resultado.getString(7) + " " + resultado.getString(8);
 
 				i++;
 			}
@@ -140,9 +189,9 @@ public class Conexion {
 		return ventas;
 	}
 
-	public String [] damePedidos(String nif) {
+	public String[] damePedidos(String nif) {
 
-		String [] pedidos = new String [dameNumeroFilasPedidos(nif)];
+		String[] pedidos = new String[dameNumeroFilasPedidos(nif)];
 
 		PreparedStatement enviaConsultaArticulosPedidos;
 
@@ -155,14 +204,14 @@ public class Conexion {
 			enviaConsultaArticulosPedidos.setString(1, nif);
 
 			ResultSet resultado = enviaConsultaArticulosPedidos.executeQuery();
-			
+
 			int i = 0;
-			
+
 			while (resultado.next()) {
 				pedidos[i] = resultado.getString(1) + " " + resultado.getString(2) + " " + resultado.getString(3) + " "
 						+ resultado.getString(4) + " " + resultado.getString(5) + " " + resultado.getString(6) + " "
 						+ resultado.getString(7) + " " + resultado.getString(8);
-				
+
 				i++;
 			}
 			resultado.close();

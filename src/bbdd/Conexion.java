@@ -166,11 +166,7 @@ public class Conexion {
 	}
 
 	/**
-	 * Metodo dameVentas nos devuelve un array con todas las ventas PERO no lo
-	 * estamos utilizando finalmente
-	 * 
-	 * @param nif
-	 * @return
+	 *
 	 */
 	public String[] dameVentas(String nif) {
 

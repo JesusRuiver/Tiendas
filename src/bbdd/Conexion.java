@@ -148,13 +148,14 @@ public class Conexion {
 
 		ArrayList<String> articulos = new ArrayList<String>();
 
-		String consulta = "SELECT distinct * FROM ARTICULOS";
+		String consulta = "Select distinct a.articulo, f.nombre from articulos a, fabricantes f "
+				+ "where  a.cod_fabricante = f.cod_fabricante;;";
 
 		try {
 			ResultSet resultado = sentencia.executeQuery(consulta);
 
 			while (resultado.next()) {
-				articulos.add(" " + resultado.getString(1) + " " + resultado.getString(2));
+				articulos.add("ARTICULO: " + resultado.getString(1) +" FABRICANTE: " + resultado.getString(2));
 			}
 			resultado.close();
 		} catch (Exception e) {

@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -173,6 +174,8 @@ public class EjercicioExportarImportar extends JFrame {
 						}
 						dataOS.close(); // cerrar stream
 
+						JOptionPane.showMessageDialog(null, "Exportado Fichero Ventas");
+
 						System.out.println("Exportado Fichero Ventas");
 
 					} catch (Exception ex) {
@@ -194,8 +197,10 @@ public class EjercicioExportarImportar extends JFrame {
 
 						}
 
-						dataOS.close(); // cerrar stream
-
+						dataOS.close(); // cerrar strem
+						
+						JOptionPane.showMessageDialog(null, "Exportado Fichero Pedidos");
+						
 						System.out.println("Exportado Fichero Pedidos");
 					} catch (Exception ex) {
 						// TODO: handle exception

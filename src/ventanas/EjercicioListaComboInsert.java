@@ -64,7 +64,7 @@ public class EjercicioListaComboInsert extends JFrame {
 		scrollPane.setBounds(26, 34, 294, 308);
 		contentPane.add(scrollPane);
 
-		JList<Tienda> listTiendas = new JList();
+		JList<String> listTiendas = new JList();
 
 		scrollPane.setViewportView(listTiendas);
 
@@ -118,17 +118,17 @@ public class EjercicioListaComboInsert extends JFrame {
 		listTiendas.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 
-				String nif = listTiendas.getSelectedValue().getNif();
+			
 
 			}
 		});
 
-		String informacionComboArticulos = cboxArticulos.getSelectedItem().toString();
+
 
 		cboxArticulos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				String informacionComboArticulos = cboxArticulos.getSelectedItem().toString();
+				
 
 			}
 		});
@@ -138,23 +138,23 @@ public class EjercicioListaComboInsert extends JFrame {
 	// ------------------------------------------METODOS-----------------------------------------//
 
 	private void rellenaComboBoxArticulos(JComboBox cboxArticulos) {
-		ArrayList<Articulo> articulos = new ArrayList<Articulo>();
-
-		articulos = miConexion.rellenaComboBoxArticulos();
-
-		for (int i = 0; i < articulos.size(); i++) {
-
+		ArrayList<String> articulos = new ArrayList<String>();
+		
+		articulos = miConexion.dameArticulos();
+		
+		for (int i = 0; i< articulos.size();i++){
 			cboxArticulos.addItem(articulos.get(i));
 		}
+		
 	}
 
 	private void rellenaListaTiendas(JList listTiendas) {
 
-		DefaultListModel<Tienda> modeloLista = new DefaultListModel<Tienda>();
+		DefaultListModel<String> modeloLista = new DefaultListModel<String>();
 
-		ArrayList<Tienda> datos = new ArrayList<Tienda>();
+		ArrayList<String> datos = new ArrayList<String>();
 
-		datos = miConexion.rellenaComboBoxTiendas();
+		datos = miConexion.dameTiendas();
 
 		for (int i = 0; i < datos.size(); i++) {
 			modeloLista.addElement(datos.get(i));

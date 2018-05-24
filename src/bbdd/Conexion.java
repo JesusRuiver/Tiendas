@@ -144,6 +144,26 @@ public class Conexion {
 		return tiendas;
 	}
 
+	public ArrayList<String> dameArticulos() {
+
+		ArrayList<String> articulos = new ArrayList<String>();
+
+		String consulta = "SELECT distinct * FROM ARTICULOS";
+
+		try {
+			ResultSet resultado = sentencia.executeQuery(consulta);
+
+			while (resultado.next()) {
+				articulos.add(" " + resultado.getString(1) + " " + resultado.getString(2));
+			}
+			resultado.close();
+		} catch (Exception e) {
+
+		}
+
+		return articulos;
+	}
+
 	/**
 	 * Metodo dameVentas nos devuelve un array con todas las ventas PERO no lo
 	 * estamos utilizando finalmente
